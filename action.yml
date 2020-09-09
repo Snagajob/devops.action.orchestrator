@@ -1,0 +1,34 @@
+name: 'Pipeline Orchestrator'
+description: 'Orchestrate the pipeline'
+inputs:
+  aws_access_key_id:
+    description: Key Id
+    required: true
+  aws_secret_access_key:
+    description: Secret Key
+    required: true
+  run_env:
+    description: 'Run environment: [dev, qa, uat, prod]'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Invoke orchestrator codebuild
+      shell: bash
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.aws_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws_secret_access_key }}
+        RUN_ENV: ${{ inputs.run_env }}
+      run: |
+        echo "You want to deploy to the ${{ inputs.run_env }} environment."
+        export AWS_DEFAULT_REGION=us-east-1
+
+        cd ../../_actions/Snagajob/devops.action.orchestrator/master
+        pip3 -q install -r requirements.txt
+        python3 bootstrap.py
+    - name: Build Link
+      shell: bash
+      run: |
+        echo -e "\n\nClick link below to access build:\n"
+        echo "$CODEBUILD_LINK"
+
