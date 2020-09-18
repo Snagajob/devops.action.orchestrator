@@ -24,7 +24,7 @@ runs:
         export AWS_DEFAULT_REGION=us-east-1
 
         cd ../../_actions/Snagajob/devops.action.orchestrator/master
-        pip3 install -r requirements.txt
+        pip3 -q install -r requirements.txt
         python3 bootstrap.py
     - name: Build Link
       shell: bash
