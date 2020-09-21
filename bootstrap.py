@@ -50,9 +50,15 @@ def start_build(project_path_list: List[str]):
     )
 
     build_id = response["build"]["id"]
-    print(
-        f"Project: {project_path}\nBuild: https://console.aws.amazon.com/codesuite/codebuild/{ACCOUNT_ID}/projects/orchestrator/build/{build_id}/?region=us-east-1\n"
-    )
+
+    if len(project_path_list) == 1:
+        print(
+            f"Project: {project_path}\n"
+        )
+    else:
+        print("Deploying full project as one build")
+
+    print(f"Build: https://console.aws.amazon.com/codesuite/codebuild/{ACCOUNT_ID}/projects/orchestrator/build/{build_id}/?region=us-east-1\n")
 
 
 GIT_REPO_PATH = getenv("GITHUB_REPOSITORY").split("/")[1]
@@ -71,6 +77,7 @@ standardized_path_list: List[str] = [
 ]
 
 if PARELLELIZE:
+    print("Executing parallized project build!")
     for project_path in standardized_path_list:
         print(f"Passing in project path: {project_path}")
         start_build([project_path])
