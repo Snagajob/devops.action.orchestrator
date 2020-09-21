@@ -15,7 +15,7 @@ project_list: List[Path] = [
 ]
 
 for project_path in project_list:
-    project_path = f"{project_path.parent.name}{str(project_path).rsplit(project_path.parent.name)[1]}"
+    project_path = f"{GIT_REPO_PATH}/{project_path.parent.name}{str(project_path).rsplit(project_path.parent.name)[1]}"
     print(f"Passing in project path: {project_path}")
     response: Dict = boto3.client('codebuild').start_build(
         projectName='orchestrator',
