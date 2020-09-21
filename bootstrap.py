@@ -1,5 +1,6 @@
 from glob import glob
 from os import getenv
+from pathlib import Path
 from typing import Dict, List
 
 import boto3
@@ -10,7 +11,7 @@ PROJECT_SEARCH_PATH = f"/home/runner/work/{GIT_REPO_PATH}/**/config.json"
 print(f"Looking in {PROJECT_SEARCH_PATH} for config.json files")
 
 project_list: List[str] = [
-    entry for entry in glob(PROJECT_SEARCH_PATH, recursive=True)
+    Path(entry).parent.name for entry in glob(PROJECT_SEARCH_PATH, recursive=True)
 ]
 
 for project_path in project_list:
@@ -41,4 +42,4 @@ for project_path in project_list:
 
     account_id = boto3.client('sts').get_caller_identity()['Account']
 
-    print(f"Project: {project_path}, Build: https://console.aws.amazon.com/codesuite/codebuild/{account_id}/projects/orchestrator/build/{build_id}/?region=us-east-1")
+    print(f"Project: {project_path}\nBuild: https://console.aws.amazon.com/codesuite/codebuild/{account_id}/projects/orchestrator/build/{build_id}/?region=us-east-1\n")
