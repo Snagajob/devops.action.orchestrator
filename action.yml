@@ -22,7 +22,6 @@ runs:
       run: |
         echo "You want to deploy to the ${{ inputs.run_env }} environment."
         export AWS_DEFAULT_REGION=us-east-1
-        echo $PWD
 
         cd ../../_actions/Snagajob/devops.action.orchestrator/master
         pip3 -q install -r requirements.txt
