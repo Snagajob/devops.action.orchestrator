@@ -26,9 +26,4 @@ runs:
         cd ../../_actions/Snagajob/devops.action.orchestrator/master
         pip3 -q install -r requirements.txt
         python3 bootstrap.py
-    - name: Build Link
-      shell: bash
-      run: |
-        echo -e "\n\nClick link below to access build:\n"
-        echo "$CODEBUILD_LINK"
 
