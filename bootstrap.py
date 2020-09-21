@@ -10,11 +10,13 @@ PROJECT_SEARCH_PATH = f"/home/runner/work/{GIT_REPO_PATH}/**/config.json"
 
 print(f"Looking in {PROJECT_SEARCH_PATH} for config.json files")
 
-project_list: List[str] = [
-    Path(entry).parent.name for entry in glob(PROJECT_SEARCH_PATH, recursive=True)
+project_list: List[Path] = [
+    Path(entry) for entry in glob(PROJECT_SEARCH_PATH, recursive=True)
 ]
 
 for project_path in project_list:
+    project_path = f"{project_path.parent.name}{str(project_path).rsplit(project_path.parent.name)[1]}"
+    print(f"Passing in project path: {project_path}")
     response: Dict = boto3.client('codebuild').start_build(
         projectName='orchestrator',
         secondarySourcesOverride=[
