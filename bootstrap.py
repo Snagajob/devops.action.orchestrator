@@ -4,7 +4,7 @@ from typing import Dict, List
 
 import boto3
 
-PROJECT_SEARCH_PATH = f"{getenv('GIT_REPOSITORY')}/**/config.json"
+PROJECT_SEARCH_PATH = f"{getenv('GITHUB_REPOSITORY')}/**/config.json"
 
 print(f"Looking in {PROJECT_SEARCH_PATH} for config.json files")
 
