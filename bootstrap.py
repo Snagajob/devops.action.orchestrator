@@ -5,7 +5,6 @@ from typing import Dict, List
 import boto3
 
 GIT_REPO_PATH = getenv('GITHUB_REPOSITORY').split('/')[1]
-
 PROJECT_SEARCH_PATH = f"/home/runner/{GIT_REPO_PATH}/**/config.json"
 
 print(f"Looking in {PROJECT_SEARCH_PATH} for config.json files")
