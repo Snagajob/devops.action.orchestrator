@@ -52,6 +52,11 @@ def start_build(project_path_list: List[str]):
                 "value": ",".join(project_path_list),
                 "type": "PLAINTEXT",
             },
+            {
+                "name": "DEBUG",
+                "value": DEBUG,
+                "type": "PLAINTEXT"
+            }
         ],
     }
 
