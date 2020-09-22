@@ -6,7 +6,7 @@ from typing import Dict, List
 import boto3
 
 ACCOUNT_ID = boto3.client("sts").get_caller_identity()["Account"]
-PARELLELIZE = getenv("PARALLELIZE", None)
+PARALLELIZE = getenv("PARALLELIZE", None)
 DEBUG = getenv("DEBUG", None)
 
 
@@ -91,7 +91,7 @@ standardized_path_list: List[str] = [
     for project_path in project_list
 ]
 
-if PARELLELIZE:
+if PARALLELIZE:
     print("\n[*] Executing parallized project build!")
     for project_path in standardized_path_list:
         print(f"Passing in project path: {project_path}")
