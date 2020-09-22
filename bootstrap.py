@@ -52,24 +52,18 @@ def start_build(project_path_list: List[str]):
                 "value": ",".join(project_path_list),
                 "type": "PLAINTEXT",
             },
-            {
-                "name": "DEBUG",
-                "value": DEBUG,
-                "type": "PLAINTEXT"
-            }
         ],
     }
 
     if DEBUG:
-        payload['debugSessionEnabled'] = True
+        payload["debugSessionEnabled"] = True
+        payload["environmentVariablesOverride"].append(
+            {"name": "DEBUG", "value": DEBUG, "type": "PLAINTEXT"}
+        )
 
     response: Dict = boto3.client("codebuild").start_build(**payload)
 
     build_id = response["build"]["id"]
-
-    if DEBUG:
-        #target_session_id = response['build']['debugSession']['sessionTarget']
-        print(f'Got build info: {response["build"]}')
 
     if len(project_path_list) == 1:
         print(f"Project: {project_path}\n")
