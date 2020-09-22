@@ -7,22 +7,23 @@ import boto3
 
 ACCOUNT_ID = boto3.client("sts").get_caller_identity()["Account"]
 PARELLELIZE = getenv("PARALLELIZE", None)
+DEBUG = getenv("DEBUG", None)
 
 
 def start_build(project_path_list: List[str]):
-    response: Dict = boto3.client("codebuild").start_build(
-        projectName="orchestrator",
-        secondarySourcesOverride=[
+    payload = {
+        "projectName": "orchestrator",
+        "secondarySourcesOverride": [
             {
                 "type": "GITHUB",
                 "location": f"https://github.com/{getenv('GITHUB_REPOSITORY')}",
                 "sourceIdentifier": "git_project",
             }
         ],
-        secondarySourcesVersionOverride=[
+        "secondarySourcesVersionOverride": [
             {"sourceIdentifier": "git_project", "sourceVersion": getenv("GITHUB_SHA")}
         ],
-        environmentVariablesOverride=[
+        "environmentVariablesOverride": [
             {"name": "GIT_REF", "value": getenv("GITHUB_REF"), "type": "PLAINTEXT"},
             {
                 "name": "RUN_NUMBER",
@@ -52,9 +53,18 @@ def start_build(project_path_list: List[str]):
                 "type": "PLAINTEXT",
             },
         ],
-    )
+    }
+
+    if DEBUG:
+        payload['debugSessionEnabled'] = True
+
+    response: Dict = boto3.client("codebuild").start_build(**payload)
 
     build_id = response["build"]["id"]
+
+    if DEBUG:
+        target_session_id = response['build']['debugSession']['sessionTarget']
+        print(f'Got session target: {target_session_id}')
 
     if len(project_path_list) == 1:
         print(f"Project: {project_path}\n")

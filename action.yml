@@ -16,6 +16,9 @@ inputs:
   slack_webhook:
     description: 'Send alerts for success/failure of builds'
     required: false
+  debug:
+    description: 'Set codebuild run into debug mode'
+    required: false
 runs:
   using: "composite"
   steps:
@@ -27,8 +30,9 @@ runs:
         RUN_ENV: ${{ inputs.run_env }}
         PARALLELIZE: ${{ inputs.parallelize }}
         SLACK_WEBHOOK: ${{ inputs.slack_webhook }}
+        DEBUG: ${{ inputs.debug }}
       run: |
-        echo "You want to deploy to the ${{ inputs.run_env }} environment."
+        echo "Build will run env-specific deploys in ${{ inputs.run_env }} environment."
         export AWS_DEFAULT_REGION=us-east-1
 
         cd ../../_actions/Snagajob/devops.action.orchestrator/master
