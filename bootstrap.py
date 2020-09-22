@@ -63,8 +63,8 @@ def start_build(project_path_list: List[str]):
     build_id = response["build"]["id"]
 
     if DEBUG:
-        target_session_id = response['build']['debugSession']['sessionTarget']
-        print(f'Got session target: {target_session_id}')
+        #target_session_id = response['build']['debugSession']['sessionTarget']
+        print(f'Got build info: {response["build"]}')
 
     if len(project_path_list) == 1:
         print(f"Project: {project_path}\n")
