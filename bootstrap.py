@@ -8,6 +8,7 @@ import boto3
 ACCOUNT_ID = boto3.client("sts").get_caller_identity()["Account"]
 PARALLELIZE = getenv("PARALLELIZE", None)
 DEBUG = getenv("DEBUG", None)
+GEMFURY_TOKEN = getenv("GEMFURY_TOKEN", None)
 
 
 def start_build(project_path_list: List[str]):
@@ -59,6 +60,11 @@ def start_build(project_path_list: List[str]):
         payload["debugSessionEnabled"] = True
         payload["environmentVariablesOverride"].append(
             {"name": "DEBUG", "value": DEBUG, "type": "PLAINTEXT"}
+        )
+
+    if GEMFURY_TOKEN:
+        payload["environmentVariablesOverride"].append(
+            {"name": "GEMFURY_TOKEN", "value": GEMFURY_TOKEN, "type": "PLAINTEXT"}
         )
 
     response: Dict = boto3.client("codebuild").start_build(**payload)

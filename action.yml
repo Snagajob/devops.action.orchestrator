@@ -19,6 +19,9 @@ inputs:
   debug:
     description: 'Set codebuild run into debug mode'
     required: false
+  gemfury_token:
+    description: 'Push/pull gemfury token'
+    required: false
 runs:
   using: "composite"
   steps:
@@ -31,6 +34,7 @@ runs:
         PARALLELIZE: ${{ inputs.parallelize }}
         SLACK_WEBHOOK: ${{ inputs.slack_webhook }}
         DEBUG: ${{ inputs.debug }}
+        GEMFURY_TOKEN: ${{ inputs.gemfury_token }}
       run: |
         echo "Build will run env-specific deploys in ${{ inputs.run_env }} environment."
         export AWS_DEFAULT_REGION=us-east-1
