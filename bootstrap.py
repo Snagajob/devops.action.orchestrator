@@ -9,6 +9,7 @@ ACCOUNT_ID = boto3.client("sts").get_caller_identity()["Account"]
 PARALLELIZE = getenv("PARALLELIZE", None)
 DEBUG = getenv("DEBUG", None)
 GEMFURY_TOKEN = getenv("GEMFURY_TOKEN", None)
+RUN_ENV = getenv("RUN_ENV", None)
 
 
 def start_build(project_path_list: List[str]):
@@ -42,7 +43,7 @@ def start_build(project_path_list: List[str]):
                 "value": getenv("GITHUB_SHA"),
                 "type": "PLAINTEXT",
             },
-            {"name": "RUN_ENV", "value": getenv("RUN_ENV"), "type": "PLAINTEXT"},
+            {"name": "RUN_ENV", "value": RUN_ENV, "type": "PLAINTEXT"},
             {
                 "name": "SLACK_WEBHOOK",
                 "value": getenv("SLACK_WEBHOOK"),
@@ -102,6 +103,9 @@ if PARALLELIZE:
     for project_path in standardized_path_list:
         print(f"Passing in project path: {project_path}")
         start_build([project_path])
+
+if RUN_ENV is None:
+    print("\n[X] Skipping build since RUN_ENV is not specified.")
 else:
     print("\n[*] Executing standard (non-parallelized) project build!")
     start_build(standardized_path_list)
