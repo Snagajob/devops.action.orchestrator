@@ -98,14 +98,14 @@ standardized_path_list: List[str] = [
     for project_path in project_list
 ]
 
-if PARALLELIZE and RUN_ENV is not None:
+if RUN_ENV not in ["dev", "qa", "uat", "prod"]:
+    print("\n[X] Skipping build since RUN_ENV is not valid.")
+
+if PARALLELIZE:
     print("\n[*] Executing parallized project build!")
     for project_path in standardized_path_list:
         print(f"Passing in project path: {project_path}")
         start_build([project_path])
-
-if RUN_ENV is None:
-    print("\n[X] Skipping build since RUN_ENV is not specified.")
 else:
     print("\n[*] Executing standard (non-parallelized) project build!")
     start_build(standardized_path_list)
