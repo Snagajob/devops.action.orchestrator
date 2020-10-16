@@ -100,6 +100,7 @@ standardized_path_list: List[str] = [
 
 if RUN_ENV not in ["dev", "qa", "uat", "prod"]:
     print("\n[X] Skipping build since RUN_ENV is not valid.")
+    exit(0)
 
 if PARALLELIZE:
     print("\n[*] Executing parallized project build!")
