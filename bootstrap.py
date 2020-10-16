@@ -98,7 +98,7 @@ standardized_path_list: List[str] = [
     for project_path in project_list
 ]
 
-if PARALLELIZE:
+if PARALLELIZE and RUN_ENV is not None:
     print("\n[*] Executing parallized project build!")
     for project_path in standardized_path_list:
         print(f"Passing in project path: {project_path}")
