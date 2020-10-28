@@ -10,6 +10,7 @@ PARALLELIZE = getenv("PARALLELIZE", None)
 DEBUG = getenv("DEBUG", None)
 GEMFURY_TOKEN = getenv("GEMFURY_TOKEN", None)
 RUN_ENV = getenv("RUN_ENV", None)
+ARGO_SKIP_ENVS = getenv("ARGO_SKIP_ENVS", None)
 
 
 def start_build(project_path_list: List[str]):
@@ -67,6 +68,12 @@ def start_build(project_path_list: List[str]):
         payload["environmentVariablesOverride"].append(
             {"name": "GEMFURY_TOKEN", "value": GEMFURY_TOKEN, "type": "PLAINTEXT"}
         )
+
+    if ARGO_SKIP_ENVS:
+        payload["environmentVariablesOverride"].append(
+            {"name": "ARGO_SKIP_ENVS", "value": ARGO_SKIP_ENVS, "type": "PLAINTEXT"}
+        )
+        print(f"Adding ARGO_SKIP_ENVS: {ARGO_SKIP_ENVS}")
 
     response: Dict = boto3.client("codebuild").start_build(**payload)
 
