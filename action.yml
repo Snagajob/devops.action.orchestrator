@@ -16,6 +16,9 @@ inputs:
   slack_webhook:
     description: 'Send alerts for success/failure of builds'
     required: false
+  argo_notification_webhook:
+    description: 'Send notifications for workflow success/failures here'
+    required: false
   debug:
     description: 'Set codebuild run into debug mode'
     required: false
@@ -39,6 +42,7 @@ runs:
         DEBUG: ${{ inputs.debug }}
         GEMFURY_TOKEN: ${{ inputs.gemfury_token }}
         ARGO_SKIP_ENVS: ${{ inputs.argo_skip_envs }}
+        ARGO_NOTIFICATION_WEBHOOK: ${{ inputs.argo_notification_webhook }}
       run: |
         echo "Build will run env-specific deploys in ${{ inputs.run_env }} environment."
         export AWS_DEFAULT_REGION=us-east-1

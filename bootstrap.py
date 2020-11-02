@@ -11,6 +11,7 @@ DEBUG = getenv("DEBUG", None)
 GEMFURY_TOKEN = getenv("GEMFURY_TOKEN", None)
 RUN_ENV = getenv("RUN_ENV", None)
 ARGO_SKIP_ENVS = getenv("ARGO_SKIP_ENVS", None)
+ARGO_NOTIFICATION_WEBHOOK = getenv("ARGO_NOTIFICATION_WEBHOOK", None)
 
 
 def start_build(project_path_list: List[str]):
@@ -79,6 +80,12 @@ def start_build(project_path_list: List[str]):
             {"name": "ARGO_SKIP_ENVS", "value": ARGO_SKIP_ENVS, "type": "PLAINTEXT"}
         )
         print(f"Adding ARGO_SKIP_ENVS: {ARGO_SKIP_ENVS}")
+
+    if ARGO_NOTIFICATION_WEBHOOK:
+        payload["environmentVariablesOverride"].append(
+            {"name": "ARGO_NOTIFICATION_WEBHOOK", "value": ARGO_NOTIFICATION_WEBHOOK, "type": "PLAINTEXT"}
+        )
+        print(f"Adding ARGO_NOTIFICATION_WEBHOOK: {ARGO_NOTIFICATION_WEBHOOK}")
 
     response: Dict = boto3.client("codebuild").start_build(**payload)
 
