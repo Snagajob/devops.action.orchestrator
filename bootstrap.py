@@ -141,6 +141,6 @@ slack_commit_url = (
 requests.post(
     SLACK_WEBHOOK,
     json={
-        "text": f"New build detected for repository: *{GITHUB_REPOSITORY}* :: Commit *{slack_commit_url}*"
+        "text": f"New build detected for repository: *{GITHUB_REPOSITORY}* :: Commit *{slack_commit_url}* :: Run Env *{RUN_ENV}*"
     },
 )
