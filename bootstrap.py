@@ -134,9 +134,14 @@ else:
     print("\n[*] Executing standard (non-parallelized) project build!")
     start_build(standardized_path_list)
 
+slack_commit_url = (
+    f"<https://github.com/{getenv('GIT_REPOSITORY')}/"
+    f"commit/{getenv('GITHUB_SHA')}|{getenv('GIT_SHA')[:7]}>",
+)
+
 requests.post(
     SLACK_WEBHOOK,
     json={
-        "text": f"New build detected for repository: {GITHUB_REPOSITORY} :: Commit {GITHUB_SHA}"
+        "text": f"New build detected for repository: *{GITHUB_REPOSITORY}* :: Commit *{slack_commit_url}*"
     },
 )
