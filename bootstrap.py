@@ -2,6 +2,7 @@ from glob import glob
 from os import getenv
 from pathlib import Path
 from typing import Dict, List
+import requests
 
 import boto3
 
@@ -12,6 +13,9 @@ GEMFURY_TOKEN = getenv("GEMFURY_TOKEN", None)
 RUN_ENV = getenv("RUN_ENV", None)
 ARGO_SKIP_ENVS = getenv("ARGO_SKIP_ENVS", None)
 ARGO_NOTIFICATION_WEBHOOK = getenv("ARGO_NOTIFICATION_WEBHOOK", None)
+SLACK_WEBHOOK = getenv("SLACK_WEBHOOK", None)
+GITHUB_REPOSITORY = getenv("GITHUB_REPOSITORY", None)
+GITHUB_SHA = getenv("GITHUB_SHA", None)
 
 
 def start_build(project_path_list: List[str]):
@@ -42,13 +46,13 @@ def start_build(project_path_list: List[str]):
             },
             {
                 "name": "GIT_COMMIT_SHA",
-                "value": getenv("GITHUB_SHA"),
+                "value": GITHUB_SHA,
                 "type": "PLAINTEXT",
             },
             {"name": "RUN_ENV", "value": RUN_ENV, "type": "PLAINTEXT"},
             {
                 "name": "SLACK_WEBHOOK",
-                "value": getenv("SLACK_WEBHOOK"),
+                "value": SLACK_WEBHOOK,
                 "type": "PLAINTEXT",
             },
             {
@@ -56,11 +60,7 @@ def start_build(project_path_list: List[str]):
                 "value": ",".join(project_path_list),
                 "type": "PLAINTEXT",
             },
-            {
-                "name": "RELEASE_CHANNEL",
-                "value": "master",
-                "type": "PLAINTEXT"
-            }
+            {"name": "RELEASE_CHANNEL", "value": "master", "type": "PLAINTEXT"},
         ],
     }
 
@@ -83,7 +83,11 @@ def start_build(project_path_list: List[str]):
 
     if ARGO_NOTIFICATION_WEBHOOK:
         payload["environmentVariablesOverride"].append(
-            {"name": "ARGO_NOTIFICATION_WEBHOOK", "value": ARGO_NOTIFICATION_WEBHOOK, "type": "PLAINTEXT"}
+            {
+                "name": "ARGO_NOTIFICATION_WEBHOOK",
+                "value": ARGO_NOTIFICATION_WEBHOOK,
+                "type": "PLAINTEXT",
+            }
         )
         print(f"Adding ARGO_NOTIFICATION_WEBHOOK: {ARGO_NOTIFICATION_WEBHOOK}")
 
@@ -129,3 +133,10 @@ if PARALLELIZE:
 else:
     print("\n[*] Executing standard (non-parallelized) project build!")
     start_build(standardized_path_list)
+
+requests.post(
+    SLACK_WEBHOOK,
+    json={
+        "text": f"New build detected for repository: {GITHUB_REPOSITORY} :: Commit {GITHUB_SHA}"
+    },
+)
