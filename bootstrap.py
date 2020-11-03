@@ -135,8 +135,7 @@ else:
     start_build(standardized_path_list)
 
 slack_commit_url = (
-    f"<https://github.com/{getenv('GIT_REPOSITORY')}/"
-    f"commit/{getenv('GITHUB_SHA')}|{getenv('GIT_SHA')[:7]}>",
+    f"<https://github.com/{GITHUB_REPOSITORY}/commit/{GITHUB_SHA}|{GITHUB_SHA[:7]}>",
 )
 
 requests.post(
