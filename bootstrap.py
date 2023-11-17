@@ -16,7 +16,7 @@ ARGO_NOTIFICATION_WEBHOOK = getenv("ARGO_NOTIFICATION_WEBHOOK", None)
 SLACK_WEBHOOK = getenv("SLACK_WEBHOOK", None)
 GITHUB_REPOSITORY = getenv("GITHUB_REPOSITORY", None)
 GITHUB_SHA = getenv("GITHUB_SHA", None)
-RELEASE_CHANNEL = getenv("RELEASE_CHANNEL", None)
+RELEASE_CHANNEL = getenv("RELEASE_CHANNEL", "master")
 
 
 def start_build(project_path_list: List[str]):
@@ -62,7 +62,7 @@ def start_build(project_path_list: List[str]):
                 "type": "PLAINTEXT",
             },
             {   "name": "RELEASE_CHANNEL", 
-                "value": "master", 
+                "value": RELEASE_CHANNEL, 
                 "type": "PLAINTEXT"
             },
         ],
@@ -94,16 +94,6 @@ def start_build(project_path_list: List[str]):
             }
         )
         print(f"Adding ARGO_NOTIFICATION_WEBHOOK: {ARGO_NOTIFICATION_WEBHOOK}")
-
-    if RELEASE_CHANNEL:
-        payload["environmentVariablesOverride"].append(
-            {
-                "name": "RELEASE_CHANNEL",
-                "value": RELEASE_CHANNEL,
-                "type": "PLAINTEXT",
-            }
-        )
-        print(f"Adding RELEASE_CHANNEL: {RELEASE_CHANNEL}")
 
     response: Dict = boto3.client("codebuild").start_build(**payload)
 
