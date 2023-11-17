@@ -115,6 +115,8 @@ PROJECT_SEARCH_PATH = f"/home/runner/work/{GIT_REPO_PATH}/**/config.json"
 
 print(f"Looking in {PROJECT_SEARCH_PATH} for config.json files")
 
+print(f"Release channel: {RELEASE_CHANNEL}")
+
 project_list: List[Path] = [
     Path(entry) for entry in glob(PROJECT_SEARCH_PATH, recursive=True)
 ]
