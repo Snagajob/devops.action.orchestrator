@@ -62,7 +62,7 @@ def start_build(project_path_list: List[str]):
                 "type": "PLAINTEXT",
             },
             {   "name": "RELEASE_CHANNEL", 
-                "value": RELEASE_CHANNEL, 
+                "value": "master", 
                 "type": "PLAINTEXT"
             },
         ],
