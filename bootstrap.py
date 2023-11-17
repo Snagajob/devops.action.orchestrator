@@ -16,7 +16,10 @@ ARGO_NOTIFICATION_WEBHOOK = getenv("ARGO_NOTIFICATION_WEBHOOK", None)
 SLACK_WEBHOOK = getenv("SLACK_WEBHOOK", None)
 GITHUB_REPOSITORY = getenv("GITHUB_REPOSITORY", None)
 GITHUB_SHA = getenv("GITHUB_SHA", None)
-RELEASE_CHANNEL = getenv("RELEASE_CHANNEL", "master")
+RELEASE_CHANNEL = getenv("RELEASE_CHANNEL")
+
+if RELEASE_CHANNEL == "":
+    RELEASE_CHANNEL = "master"
 
 
 def start_build(project_path_list: List[str]):
