@@ -16,6 +16,7 @@ ARGO_NOTIFICATION_WEBHOOK = getenv("ARGO_NOTIFICATION_WEBHOOK", None)
 SLACK_WEBHOOK = getenv("SLACK_WEBHOOK", None)
 GITHUB_REPOSITORY = getenv("GITHUB_REPOSITORY", None)
 GITHUB_SHA = getenv("GITHUB_SHA", None)
+RELEASE_CHANNEL = getenv("RELEASE_CHANNEL", "master")
 
 
 def start_build(project_path_list: List[str]):
@@ -60,7 +61,10 @@ def start_build(project_path_list: List[str]):
                 "value": ",".join(project_path_list),
                 "type": "PLAINTEXT",
             },
-            {"name": "RELEASE_CHANNEL", "value": "master", "type": "PLAINTEXT"},
+            {   "name": "RELEASE_CHANNEL", 
+                "value": RELEASE_CHANNEL, 
+                "type": "PLAINTEXT"
+            },
         ],
     }
 
